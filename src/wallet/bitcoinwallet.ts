@@ -1,9 +1,9 @@
-import { BIP32Factory } from "bip32"
+import { BIP32Factory, BIP32Interface } from "bip32"
 import * as ecc from "tiny-secp256k1"
-import { payments, networks, initEccLib } from "bitcoinjs-lib"
+import { payments, networks, initEccLib, Network } from "bitcoinjs-lib"
 
-const bip32 = BIP32Factory(ecc)
 initEccLib(ecc)
+const bip32 = BIP32Factory(ecc)
 
 interface BitcoinWallet {
   privateKey: string
@@ -41,7 +41,7 @@ export function deriveBitcoinPrivateKey(
   if (!publicKey) {
     throw new Error("Could not derive public key");
   }
-  return {privateKey: (Buffer.from(child.privateKey)).toString(), publicKey: publicKey};
+  return {privateKey: (Buffer.from(child.privateKey)).toString("hex"), publicKey: publicKey};
 }
 
 /**
@@ -61,6 +61,6 @@ export function getBitcoinWallet(privateKey: string): BitcoinWallet {
   }
 } 
 
-function getAddress(node: any, network: any): string | undefined {
+function getAddress(node: BIP32Interface, network: Network): string | undefined {
   return payments.p2tr({ pubkey: Buffer.from(node.publicKey.slice(1, 33)), network }).address
 }

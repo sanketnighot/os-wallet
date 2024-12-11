@@ -32,10 +32,9 @@ interface WalletData {
 const generateWallets = async (numberOfWallets: number = 1): Promise<void> => {
   try {
     // Generate mnemonic
-    // const mnemonicResponse = await generateMnemonicForUser()
-    const mnemonic = "hunt immense obey lemon laugh potato eight left alley correct lift venture robust deposit absorb easy logic radio bubble box nest betray erupt discover"
-    // if (!mnemonicResponse.success) throw new Error("Failed to generate mnemonic")
-    // const mnemonic = mnemonicResponse.data
+    const mnemonicResponse = await generateMnemonicForUser()
+    if (!mnemonicResponse.success) throw new Error("Failed to generate mnemonic")
+    const mnemonic = mnemonicResponse.data
 
     // Encrypt mnemonic
     const encryptedMnemonicResponse = await encryptData(mnemonic)
@@ -71,7 +70,6 @@ const generateWallets = async (numberOfWallets: number = 1): Promise<void> => {
     for (let index = 0; index < numberOfWallets; index++) {
       // Bitcoin wallet
       const bitcoinPath = `m/86'/0'/0'/0/${index}`
-      console.log(bitcoinPath)
       const bitcoinWallet = deriveBitcoinPrivateKey(seed, bitcoinPath)
       walletData.accounts.bitcoin?.push({
         path: bitcoinPath,
