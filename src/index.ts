@@ -70,7 +70,8 @@ const generateWallets = async (numberOfWallets: number = 1): Promise<void> => {
     // Generate wallets for each coin type
     for (let index = 0; index < numberOfWallets; index++) {
       // Bitcoin wallet
-      const bitcoinPath = `m/84'/0'/0'/0/${index}`
+      const bitcoinPath = `m/86'/0'/0'/0/${index}`
+      console.log(bitcoinPath)
       const bitcoinWallet = deriveBitcoinPrivateKey(seed, bitcoinPath)
       walletData.accounts.bitcoin?.push({
         path: bitcoinPath,

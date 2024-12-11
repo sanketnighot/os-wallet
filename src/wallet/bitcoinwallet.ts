@@ -1,8 +1,9 @@
 import { BIP32Factory } from "bip32"
 import * as ecc from "tiny-secp256k1"
-import { payments, networks } from "bitcoinjs-lib"
+import { payments, networks, initEccLib } from "bitcoinjs-lib"
 
 const bip32 = BIP32Factory(ecc)
+initEccLib(ecc)
 
 interface BitcoinWallet {
   privateKey: string
@@ -61,5 +62,5 @@ export function getBitcoinWallet(privateKey: string): BitcoinWallet {
 } 
 
 function getAddress(node: any, network: any): string | undefined {
-  return payments.p2wpkh({ pubkey: Buffer.from(node.publicKey), network }).address
+  return payments.p2tr({ pubkey: Buffer.from(node.publicKey.slice(1, 33)), network }).address
 }
