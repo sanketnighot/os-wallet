@@ -1,6 +1,4 @@
-import nacl from "tweetnacl"
 import { generateMnemonic, mnemonicToSeedSync } from "bip39"
-import { derivePath } from "ed25519-hd-key"
 
 type Response<T = unknown> =
   | {
@@ -14,13 +12,7 @@ type Response<T = unknown> =
       error: Error | unknown
     }
 
-const coinDerivePath = {
-  bitcoin: "m/44'/0",
-  ethereum: "m/44'/60",
-  solana: "m/44'/501",
-} as const
 
-type CoinType = keyof typeof coinDerivePath
 
 export const generateMnemonicForUser = async (): Promise<Response<string>> => {
   try {
@@ -55,28 +47,4 @@ export const generateSeed = async (mnemonic: string): Promise<Response> => {
     }
   }
 }
-
-export const generateKeypair = async (
-  seed: Buffer,
-  coin: CoinType,
-  index: number
-): Promise<Response> => {
-  try {
-    const path = `${coinDerivePath[coin]}'/0'/${index}'`
-    const derivedSeed = derivePath(path, seed.toString()).key
-    const keypair = nacl.sign.keyPair.fromSeed(derivedSeed)
-    return {
-      data: keypair,
-      success: true,
-      message: "Keypair generated successfully",
-    }
-  } catch (error) {
-    return {
-      message: "Failed to generate keypair",
-      success: false,
-      error,
-    }
-  }
-}
-
 
