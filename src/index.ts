@@ -3,7 +3,7 @@ import { encryptData } from "./cryptography"
 import fs from "fs"
 import path from "path"
 import crypto from "crypto"
-import { deriveBitcoinWallet } from "./wallet/bitcoinwallet"
+import { deriveBitcoinPrivateKey } from "./wallet/bitcoinwallet"
 import { deriveEthereumWallet } from "./wallet/ethereumwallet"
 import { deriveSolanaWallet } from "./wallet/solanawallet"
 import { Wallet } from "ethers6"
@@ -32,9 +32,10 @@ interface WalletData {
 const generateWallets = async (numberOfWallets: number = 1): Promise<void> => {
   try {
     // Generate mnemonic
-    const mnemonicResponse = await generateMnemonicForUser()
-    if (!mnemonicResponse.success) throw new Error("Failed to generate mnemonic")
-    const mnemonic = mnemonicResponse.data
+    // const mnemonicResponse = await generateMnemonicForUser()
+    const mnemonic = "hunt immense obey lemon laugh potato eight left alley correct lift venture robust deposit absorb easy logic radio bubble box nest betray erupt discover"
+    // if (!mnemonicResponse.success) throw new Error("Failed to generate mnemonic")
+    // const mnemonic = mnemonicResponse.data
 
     // Encrypt mnemonic
     const encryptedMnemonicResponse = await encryptData(mnemonic)
@@ -69,13 +70,13 @@ const generateWallets = async (numberOfWallets: number = 1): Promise<void> => {
     // Generate wallets for each coin type
     for (let index = 0; index < numberOfWallets; index++) {
       // Bitcoin wallet
-      const bitcoinPath = `m/86'/0'/0'/0'/${index}'`
-      const bitcoinWallet = deriveBitcoinWallet(seed, bitcoinPath)
+      const bitcoinPath = `m/84'/0'/0'/0/${index}`
+      const bitcoinWallet = deriveBitcoinPrivateKey(seed, bitcoinPath)
       walletData.accounts.bitcoin?.push({
         path: bitcoinPath,
         publicKey: bitcoinWallet.publicKey,
         privateKey: bitcoinWallet.privateKey,
-        address: bitcoinWallet.wif // Using WIF as address for Bitcoin
+        address: bitcoinWallet.publicKey
       })
 
       // Ethereum wallet
