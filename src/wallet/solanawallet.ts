@@ -15,7 +15,7 @@ export function deriveSolanaPrivateKey(
   seed: Buffer,
   derivationPath: string
 ): Uint8Array {
-  const derivedSeed = derivePath(derivationPath, seed.toString()).key;
+  const derivedSeed = derivePath(derivationPath, seed.toString('hex')).key;
   return nacl.sign.keyPair.fromSeed(derivedSeed).secretKey;
 }
 

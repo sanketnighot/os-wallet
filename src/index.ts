@@ -89,7 +89,7 @@ const generateWallets = async (numberOfWallets: number = 1): Promise<void> => {
       })
 
       // Solana wallet
-      const solanaPath = `m/44'/501'/0'/0'/${index}'`
+      const solanaPath = `m/44'/501'/${index}'/0'`
       const solanaWallet = deriveSolanaWallet(seed, solanaPath)
       walletData.accounts.solana?.push({
         path: solanaPath,
